@@ -10,3 +10,4 @@ class PostORM(Base):
     title: Mapped[str]
     content: Mapped[str]
     timestamp: Mapped[datetime]
+    author: Mapped[str | None]
