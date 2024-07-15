@@ -10,4 +10,8 @@ class PostORM(Base):
     title: Mapped[str]
     content: Mapped[str]
     timestamp: Mapped[datetime]
-    author: Mapped[str | None]
+
+    def to_dict(self):
+        return dict(
+            id=self.id, title=self.title, content=self.content, timestamp=self.timestamp
+        )

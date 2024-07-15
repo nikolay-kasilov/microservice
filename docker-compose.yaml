@@ -3,7 +3,30 @@ services:
     image: postgres:15.1
     container_name: database
     restart: unless-stopped
-    env_file: 
-      - .env
+    env_file: .env
+  
+  frontend:
+    image: nginx:latest
+    container_name: front
+    restart: unless-stopped
     ports:
-      - 5432:5432
+      - "80:80"
+    volumes:
+      - ./frontend.conf:/etc/nginx/nginx.conf
+
+  posts:
+    build: ./posts
+    container_name: posts
+    restart: unless-stopped
+    env_file: .env
+
+  posts-migration:
+    build: ./posts
+    env_file: .env
+    entrypoint: alembic upgrade head
+
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: unless-stopped
+    env_file: .env
