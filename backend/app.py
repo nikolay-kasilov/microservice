@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from schemas import GetPostSchema, CreatePostSchema
 import aiohttp
 from settings import settings as s
+from logger import logger
 
 
 async def get_posts() -> list[GetPostSchema]:
@@ -14,10 +15,10 @@ async def get_posts() -> list[GetPostSchema]:
 async def create_posts(post_data: CreatePostSchema) -> GetPostSchema:
     async with aiohttp.ClientSession() as session:
         async with session.post(
-            f"http://{s.CORE_HOST}:{s.CORE_PORT}/api", data=post_data.model_dump_json()
+            f"http://{s.CORE_HOST}:{s.CORE_PORT}/api", json=post_data.to_dict()
         ) as resp:
             data = await resp.json()
-            print(data)
+            logger.info(f"{[data]}")
     return GetPostSchema(**data)
 
 
